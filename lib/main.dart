@@ -14,80 +14,72 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:isar_community/isar.dart';
-import 'package:mangayomi/eval/model/m_bridge.dart';
-import 'package:mangayomi/models/custom_button.dart';
-import 'package:mangayomi/models/manga.dart';
-import 'package:mangayomi/models/settings.dart';
-import 'package:mangayomi/models/source.dart';
-import 'package:mangayomi/models/track.dart' as track;
-import 'package:mangayomi/models/track_preference.dart';
-import 'package:mangayomi/models/track_search.dart';
-import 'package:mangayomi/modules/manga/detail/providers/track_state_providers.dart';
-import 'package:mangayomi/modules/manga/reader/providers/crop_borders_provider.dart';
-import 'package:mangayomi/modules/more/data_and_storage/providers/storage_usage.dart';
-import 'package:mangayomi/modules/more/settings/browse/providers/browse_state_provider.dart';
-import 'package:mangayomi/modules/more/settings/general/providers/general_state_provider.dart';
-import 'package:mangayomi/providers/l10n_providers.dart';
-import 'package:mangayomi/providers/storage_provider.dart';
-import 'package:mangayomi/router/router.dart';
-import 'package:mangayomi/modules/more/settings/appearance/providers/theme_mode_state_provider.dart';
-import 'package:mangayomi/l10n/generated/app_localizations.dart';
-import 'package:mangayomi/services/http/m_client.dart';
-import 'package:mangayomi/services/isolate_service.dart';
-import 'package:mangayomi/services/m_extension_server.dart';
-import 'package:mangayomi/services/download_manager/m_downloader.dart';
-import 'package:mangayomi/src/rust/frb_generated.dart';
-import 'package:mangayomi/utils/discord_rpc.dart';
-import 'package:mangayomi/utils/log/logger.dart';
-import 'package:mangayomi/utils/platform_utils.dart';
-import 'package:mangayomi/utils/url_protocol/api.dart';
-import 'package:mangayomi/modules/more/settings/appearance/providers/theme_provider.dart';
-import 'package:mangayomi/modules/library/providers/file_scanner.dart';
-import 'package:mangayomi/modules/more/settings/security/providers/security_state_provider.dart';
-import 'package:mangayomi/modules/more/settings/security/app_lock_screen.dart';
+import 'package:kagex/eval/model/m_bridge.dart';
+import 'package:kagex/models/custom_button.dart';
+import 'package:kagex/models/manga.dart';
+import 'package:kagex/models/settings.dart';
+import 'package:kagex/models/source.dart';
+import 'package:kagex/models/track.dart' as track;
+import 'package:kagex/models/track_preference.dart';
+import 'package:kagex/models/track_search.dart';
+import 'package:kagex/modules/manga/detail/providers/track_state_providers.dart';
+import 'package:kagex/modules/manga/reader/providers/crop_borders_provider.dart';
+import 'package:kagex/modules/more/data_and_storage/providers/storage_usage.dart';
+import 'package:kagex/modules/more/settings/browse/providers/browse_state_provider.dart';
+import 'package:kagex/modules/more/settings/general/providers/general_state_provider.dart';
+import 'package:kagex/providers/l10n_providers.dart';
+import 'package:kagex/providers/storage_provider.dart';
+import 'package:kagex/router/router.dart';
+import 'package:kagex/modules/more/settings/appearance/providers/theme_mode_state_provider.dart';
+import 'package:kagex/l10n/generated/app_localizations.dart';
+import 'package:kagex/services/http/m_client.dart';
+import 'package:kagex/services/isolate_service.dart';
+import 'package:kagex/services/m_extension_server.dart';
+import 'package:kagex/services/download_manager/m_downloader.dart';
+import 'package:kagex/src/rust/frb_generated.dart';
+import 'package:kagex/utils/discord_rpc.dart';
+import 'package:kagex/utils/log/logger.dart';
+import 'package:kagex/utils/platform_utils.dart';
+import 'package:kagex/utils/url_protocol/api.dart';
+import 'package:kagex/modules/more/settings/appearance/providers/theme_provider.dart';
+import 'package:kagex/modules/library/providers/file_scanner.dart';
+import 'package:kagex/modules/more/settings/security/providers/security_state_provider.dart';
+import 'package:kagex/modules/more/settings/security/app_lock_screen.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:mangayomi/utils/window_geometry.dart';
+import 'package:kagex/utils/window_geometry.dart';
 
 late Isar isar;
 DiscordRPC? discordRpc;
 WebViewEnvironment? webViewEnvironment;
 String? customDns;
 void main(List<String> args) async {
-  // Zone-level catch-all for anything that slips through both layers
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       if (Platform.isLinux && runWebViewTitleBarWidget(args)) return;
 
-      // Cap the decoded image cache so a large library grid can't fill the
-      // default 100 MB ceiling with full-resolution covers and OOM constrained
-      // mobile heaps. Mobile gets a tight 64 MB; desktop keeps 256 MB. The
-      // encoded-bytes LRU in CustomExtendedNetworkImageProvider (50 MB) is a
-      // separate cache and is not affected by this setting.
       PaintingBinding.instance.imageCache.maximumSizeBytes = isMobile
           ? 64 << 20
           : 256 << 20;
 
-      // Widget-layer errors (build / layout / paint)
       FlutterError.onError = (FlutterErrorDetails details) {
-        FlutterError.presentError(details); // keep default red-screen in debug
+        FlutterError.presentError(details);
         AppLogger.log(
           'FlutterError: ${details.exceptionAsString()}\n${details.stack}',
           logLevel: LogLevel.error,
         );
       };
 
-      // Async errors that escape the Flutter framework (PlatformDispatcher)
       PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
         AppLogger.log(
           'PlatformDispatcher error: $error\n$stack',
           logLevel: LogLevel.error,
         );
-        return true; // handled — prevent app termination
+        return true;
       };
 
       MediaKit.ensureInitialized();
@@ -99,7 +91,7 @@ void main(List<String> args) async {
         await WindowGeometry.restore();
       }
       if (Platform.isWindows) {
-        registerProtocolHandler("mangayomi");
+        registerProtocolHandler("kagex");
       }
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
         final availableVersion = await WebViewEnvironment.getAvailableVersion();
@@ -213,7 +205,6 @@ class _MyAppState extends ConsumerState<MyApp>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       MExtensionServerPlatform(ref).startServer();
       if (ref.read(clearChapterCacheOnAppLaunchStateProvider)) {
-        // Watch before calling clearcache to keep it alive, so that _getTotalDiskSpace completes safely
         ref.watch(totalChapterCacheSizeStateProvider);
         ref
             .read(totalChapterCacheSizeStateProvider.notifier)
@@ -230,7 +221,6 @@ class _MyAppState extends ConsumerState<MyApp>
       if (Platform.isLinux) {
         return;
       }
-      // Lock the app when going to background (if lock is enabled)
       final lockEnabled = isar.settings.getSync(227)!.appLockEnabled ?? false;
       if (lockEnabled) {
         ref.read(appUnlockedStateProvider.notifier).lock();
@@ -307,14 +297,13 @@ class _MyAppState extends ConsumerState<MyApp>
   @override
   void onWindowClose() {
     WindowGeometry.save();
-    // Workaround for libepoxy error when closing app; caused by media-kit
     if (Platform.isLinux) exit(0);
   }
 
   Future<void> _initDeepLinks() async {
     _appLinks = AppLinks();
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
-      if (uri == lastUri) return; // Debouncing Deep Links
+      if (uri == lastUri) return;
       lastUri = uri;
       switch (uri.host) {
         case "add-repo":
@@ -479,7 +468,7 @@ class _MyAppState extends ConsumerState<MyApp>
     final filesMissing =
         !(await mpvFile.exists()) && !(await inputFile.exists());
     if (filesMissing) {
-      final bytes = await rootBundle.load("assets/mangayomi_mpv.zip");
+      final bytes = await rootBundle.load("assets/kagex_mpv.zip");
       final archive = ZipDecoder().decodeBytes(bytes.buffer.asUint8List());
       String shadersDir = p.join(dir.path, 'shaders');
       await Directory(shadersDir).create(recursive: true);
@@ -530,4 +519,10 @@ class _MouseBackButtonHandler extends StatelessWidget {
   final GoRouter router;
   final Widget child;
 
-  const _MouseBackButtonHandler(
+  const _MouseBackButtonHandler({required this.router, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+}

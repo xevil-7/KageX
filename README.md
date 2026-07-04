@@ -1,103 +1,32 @@
 <p align="center">
- <img width=200px height=200px src="assets/app_icons/icon-red.png"/>
+ <img width=200px height=200px src="android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"/>
 </p>
 
-<h1 align="center"> Kagex </h1>
+<h1 align="center"> Kagex 💀 </h1>
 
 <div align="center">
 
- 
-
-
-Mangayomi is an open-source Flutter app for reading manga, novels, and watching animes across multiple platforms.
+Kagex is a personalized, high-performance streaming and reading hub built for the ultimate anime, manga, and novel experience. 📺📚
 </div>
 
-## Features
+## Features ✨
 
 <div align="left">
 
 Features include:
-* Reading manga, webtoons, comics, novels, animes, movies, and more.
-* Local reading of content.
-* A configurable reader with multiple viewers, reading directions and other settings.
-* Tracker support for anime and manga: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [SIMKL](https://simkl.com/), [trakt](https://app.trakt.tv/) and [Kitsu](https://kitsu.io/) support.
-* Categories to organize your library.
-* Light and dark themes.
-* Create backups locally to read offline or to your desired cloud service.
+* **All-in-One Content**: Read manga, webtoons, and novels, or stream your favorite anime and movies in one place. 🚀
+* **Offline Ready**: Full support for local reading and watching. 💾
+* **Customizable Reader**: Tailor your experience with configurable viewers, reading directions, and UI settings. 🛠️
+* **Smart Tracking**: Sync your progress effortlessly with MyAnimeList, AniList, SIMKL, trakt, and Kitsu. 📊
+* **Library Management**: Organize your collections exactly how you want with custom categories. 📂
+* **Seamless UI**: Sleek, battery-efficient design with light and dark mode support. 🌙
+* **Data Security**: Keep your library safe with local backups for offline access or cloud storage. 🛡️
 
 </div>
 
-## Download
-Get the app from our [releases page](https://github.com/kodjodevf/mangayomi/releases).
+## Download 📥
+Get the latest version of Kagex from our [releases page](https://github.com/kodjodevf/mangayomi/releases).
 
-## iOS Sideloading Sources
-<a href="https://intradeus.github.io/http-protocol-redirector?r=altstore://source?url=https://raw.githubusercontent.com/kodjodevf/mangayomi/refs/heads/main/repo/source.json"><img alt="AltStore Source" src="repo/images/buttons/altstore_button.png" width="150"></a>
-&nbsp;
-<a href="https://intradeus.github.io/http-protocol-redirector?r=feather://source/https://raw.githubusercontent.com/kodjodevf/mangayomi/refs/heads/main/repo/source.json"><img alt="Feather Source" src="repo/images/buttons/feather_button.png" width="150"></a>
-&nbsp;
-<a href="https://intradeus.github.io/http-protocol-redirector?r=sidestore://source?url=https://raw.githubusercontent.com/kodjodevf/mangayomi/refs/heads/main/repo/source.json"><img alt="Sidestore Source" src="repo/images/buttons/sidestore_button.png" width="150"></a>
-&nbsp;
-<a href="https://raw.githubusercontent.com/kodjodevf/mangayomi/refs/heads/main/repo/source.json"><img alt="Direct URL Source" src="repo/images/buttons/url_button.png" width="150"></a>
+## Disclaimer ⚠️
 
-Note: Only future releases (> 0.5.2) will be signed (and therefore have AltStore/SideStore compatibility).
-
-# Contributing
-
-Contributions are welcome!
-
-To get started with extension development, see [CONTRIBUTING-DART.md](https://github.com/kodjodevf/mangayomi-extensions/blob/main/CONTRIBUTING-DART.md) for create sources in Dart or [CONTRIBUTING-JS.md](https://github.com/kodjodevf/mangayomi-extensions/blob/main/CONTRIBUTING-JS.md) for create sources in JavaScript.
-
-## Using flutter_rust_bridge
-
-To run and build this app, you need to have
-[Flutter SDK](https://docs.flutter.dev/get-started/install)
-and [Rust toolchain](https://www.rust-lang.org/tools/install)
-installed on your system.
-You can check that your system is ready with the commands below.
-Note that all the Flutter subcomponents should be installed.
-
-```bash
-rustc --version
-flutter doctor
-```
-
-You also need to have the CLI tool for flutter_rust_bridge ready.
-
-```bash
-cargo install 'flutter_rust_bridge_codegen'
-```
-
-run the following command:
-
-```bash
-flutter_rust_bridge_codegen generate
-```
-
-Now you can run and build this app just like any other Flutter projects.
-
-```bash
-flutter run
-```
-
-
-
-## License
-
-    Copyright 2023 Moustapha Kodjo Amadou
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    
-
-## Disclaimer
-
-Mangayomi is not hosting any kind of content and the developer(s) of this application does not have any affiliation with the content providers that are freely available in the internet.
+Kagex does not host any content. The developer has no affiliation with the content providers available on the internet.

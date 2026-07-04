@@ -154,7 +154,7 @@ class _StartupErrorApp extends StatelessWidget {
                 const Icon(Icons.error_outline, size: 64, color: Colors.red),
                 const SizedBox(height: 16),
                 const Text(
-                  'Failed to start Mangayomi',
+                  'Failed to start KageX',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
@@ -174,7 +174,7 @@ class _StartupErrorApp extends StatelessWidget {
 Future<void> _postLaunchInit(StorageProvider storage) async {
   await AppLogger.init();
   unawaited(MDownloader.initializeIsolatePool(poolSize: 6));
-  final hivePath = isApple ? "databases" : p.join("Mangayomi", "databases");
+  final hivePath = isApple ? "databases" : p.join("KageX", "databases");
   await Hive.initFlutter(Platform.isAndroid ? "" : hivePath);
   Hive.registerAdapter(TrackSearchAdapter());
   if (isDesktop && !kDebugMode) {
@@ -278,7 +278,7 @@ class _MyAppState extends ConsumerState<MyApp>
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       routeInformationProvider: router.routeInformationProvider,
-      title: 'MangaYomi',
+      title: 'KageX',
       scrollBehavior: AllowScrollBehavior(),
     );
   }
@@ -530,36 +530,4 @@ class _MouseBackButtonHandler extends StatelessWidget {
   final GoRouter router;
   final Widget child;
 
-  const _MouseBackButtonHandler({required this.router, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (event) {
-        if (event.buttons & kBackMouseButton != 0) {
-          if (router.canPop()) router.pop();
-        }
-      },
-      child: child,
-    );
-  }
-}
-
-class AllowScrollBehavior extends MaterialScrollBehavior {
-  // This allows the scrollable widgets to be scrolled with touch, mouse, stylus,
-  // inverted stylus, trackpad, and unknown pointer devices.
-  // This is useful for accessibility purposes, such as when using VoiceAccess,
-  // which sends pointer events with unknown type when scrolling scrollables.
-  // This is also useful for desktop platforms, where touch, stylus, and trackpad
-  // interactions are common, and we want to ensure a consistent scrolling experience
-  // across all devices.
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    PointerDeviceKind.stylus,
-    PointerDeviceKind.invertedStylus,
-    PointerDeviceKind.trackpad,
-    PointerDeviceKind.unknown,
-  };
-}
+  const _MouseBackButtonHandler(

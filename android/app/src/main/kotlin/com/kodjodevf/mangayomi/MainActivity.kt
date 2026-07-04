@@ -1,4 +1,4 @@
-package com.kodjodevf.mangayomi
+package com.xevil7.kagex
 
 import androidx.annotation.NonNull
 import libmtorrentserver.Libmtorrentserver
@@ -18,7 +18,7 @@ class MainActivity: FlutterFragmentActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "com.kodjodevf.mangayomi.libmtorrentserver",
+            "com.xevil7.kagex.libmtorrentserver",
             StandardMethodCodec.INSTANCE,
             flutterEngine.dartExecutor.binaryMessenger.makeBackgroundTaskQueue()
         ).setMethodCallHandler { call, result ->
@@ -40,7 +40,7 @@ class MainActivity: FlutterFragmentActivity() {
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "com.kodjodevf.mangayomi.apk_install",
+            "com.xevil7.kagex.apk_install",
             StandardMethodCodec.INSTANCE,
             flutterEngine.dartExecutor.binaryMessenger.makeBackgroundTaskQueue()
         ).setMethodCallHandler { call, result ->
